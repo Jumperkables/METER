@@ -5,8 +5,8 @@
 #SBATCH -t 2-00:00
 #SBATCH -x gpu[0-8]
 #SBATCH --qos short
-#SBATCH --job-name 
-#SBATCH --mem 12GB
+#SBATCH --job-name ft
+#SBATCH --mem 12G
 #SBATCH --gres gpu:1
 #SBATCH -o ../result/ft.out
 
