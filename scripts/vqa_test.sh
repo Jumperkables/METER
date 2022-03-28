@@ -8,6 +8,7 @@
 #SBATCH --mem 12G
 #SBATCH --gres gpu:1
 #SBATCH -o ../result/test.out
+
 cd ..
 source venv/bin/activate
 
