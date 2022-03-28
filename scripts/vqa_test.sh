@@ -5,7 +5,7 @@
 #SBATCH -t 2-00:00
 #SBATCH --qos short
 #SBATCH --job-name test 
-#SBATCH --mem 12G
+#SBATCH --mem 16G
 #SBATCH --gres gpu:1
 #SBATCH -o ../result/test.out
 
