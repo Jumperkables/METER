@@ -30,10 +30,15 @@ def main(_config):
         mode="max",
         save_last=True,
     )
-    logger = pl.loggers.TensorBoardLogger(
-        _config["log_dir"],
-        name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}',
-    )
+    #############
+    # Jumperkables edited
+    #breakpoint()
+    logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}', project="a_vs_c")
+    #logger = pl.loggers.TensorBoardLogger(
+    #    _config["log_dir"],
+    #    name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}',
+    #)
+    #############
 
     lr_callback = pl.callbacks.LearningRateMonitor(logging_interval="step")
     callbacks = [checkpoint_callback, lr_callback]
