@@ -34,6 +34,7 @@ joblib==1.1.0
 jsonpickle==1.5.2
 Markdown==3.3.6
 matplotlib-inline==0.1.3
+-e git+ssh://git@github.com/Jumperkables/METER.git@049479f6bfb3feff75d919ebc0c06842e0b2514c#egg=meter
 multidict==6.0.2
 munch==2.5.0
 numpy==1.22.3
@@ -52,13 +53,13 @@ py-cpuinfo==8.0.0
 pyarrow==7.0.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pyDeprecate==0.3.1
+pyDeprecate==0.3.0
 Pygments==2.11.2
 pyparsing==3.0.7
 python-dateutil==2.8.2
-pytorch-lightning==1.5.10
+pytorch-lightning==1.3.2
 pytz==2022.1
-PyYAML==6.0
+PyYAML==5.4.1
 regex==2022.3.15
 requests==2.27.1
 requests-oauthlib==1.3.1
