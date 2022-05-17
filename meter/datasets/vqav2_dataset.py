@@ -32,11 +32,28 @@ class VQAv2Dataset(BaseDataset):
             answers = self.table["answers"][index][question_index].as_py()
             labels = self.table["answer_labels"][index][question_index].as_py()
             scores = self.table["answer_scores"][index][question_index].as_py()
+            multiple_choice_answer = self.table["multiple_choice_answer"][index].as_py()
+            try:
+                return_norm = self.norm_dict.words[multiple_choice_answer]["conc-m"]["sources"]["MT40k"]["scaled"] #TODO generalise this norm
+            except KeyError:
+                return_norm = 0.5
+            ansIdx = self.answer2id[multiple_choice_answer]
+
+            if self.loss_type in ["avsc", "avsc-scaled"]:
+                assoc_tensor = self.idx2BCE_assoc_tensor[ansIdx]
+                ctgrcl_tensor = self.idx2BCE_ctgrcl_tensor[ansIdx]
+            else:
+                assoc_tensor = []
+                ctgrcl_tensor = []
         else:
             answers = list()
             labels = list()
             scores = list()
-
+            multiple_choice_answer = list()
+            return_norm = None
+            assoc_tensor = list()
+            ctgrcl_tensor = list()
+            ansIdx = None
         return {
             "image": image_tensor,
             "text": text,
@@ -44,4 +61,9 @@ class VQAv2Dataset(BaseDataset):
             "vqa_labels": labels,
             "vqa_scores": scores,
             "qid": qid,
+            "multiple_choice_answer": multiple_choice_answer,
+            "return_norm": return_norm,
+            "assoc_tensor": assoc_tensor,
+            "ctgrcl_tensor": ctgrcl_tensor,
+            "ansIdx": ansIdx,
         }

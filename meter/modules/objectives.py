@@ -140,28 +140,40 @@ def compute_snli(pl_module, batch):
 def compute_vqa(pl_module, batch):
     infer = pl_module.infer(batch, mask_text=False, mask_image=False)
     vqa_logits = pl_module.vqa_classifier(infer["cls_feats"])
-    vqa_targets = torch.zeros(
-        len(vqa_logits), pl_module.hparams.config["vqav2_label_size"]
-    ).to(pl_module.device)
+    #vqa_targets = torch.zeros(
+    #    len(vqa_logits), pl_module.hparams.config["vqav2_label_size"]
+    #).to(pl_module.device)
+    #vqa_labels = batch["vqa_labels"]
+    #vqa_scores = batch["vqa_scores"]
 
-    vqa_labels = batch["vqa_labels"]
-    vqa_scores = batch["vqa_scores"]
-
-    for i, (_label, _score) in enumerate(zip(vqa_labels, vqa_scores)):
-        for l, s in zip(_label, _score):
-            vqa_targets[i, l] = s
-
-    vqa_loss = (
-        F.binary_cross_entropy_with_logits(vqa_logits, vqa_targets)
-        * vqa_targets.shape[1]
-    )  # https://github.com/jnhwkim/ban-vqa/blob/master/train.py#L19
+    #for i, (_label, _score) in enumerate(zip(vqa_labels, vqa_scores)):
+    #    for l, s in zip(_label, _score):
+    #        vqa_targets[i, l] = s
+    if pl_module.loss_type in ["avsc","avsc-scaled"]:
+        return_norm = torch.tensor(batch["return_norm"])
+        assoc_tensor = torch.stack(batch["assoc_tensor"])
+        ctgrcl_tensor = torch.stack(batch["ctgrcl_tensor"])
+        return_norm_bool = return_norm >= 0.5
+        return_norm_bool = return_norm_bool.to(pl_module.device)
+        vqa_targets = ctgrcl_tensor * return_norm_bool.unsqueeze(1)
+        vqa_targets +=  assoc_tensor * torch.logical_not(return_norm_bool).unsqueeze(1)
+        #vqa_targets = vqa_targets.to(pl_module.device)
+        if pl_module.loss_type == "avsc":
+            vqa_loss = F.binary_cross_entropy_with_logits(vqa_logits, vqa_targets)
+        else:
+            vqa_targets = vqa_targets/vqa_targets.sum(dim=1, keepdim=True)
+            vqa_loss = F.binary_cross_entropy_with_logits(vqa_logits, vqa_targets)
+    else:
+        ansIdx = torch.tensor(batch["ansIdx"])
+        vqa_targets = F.one_hot(ansIdx, num_classes=vqa_logits.shape[1]).float().to(pl_module.device)
+        vqa_loss = F.cross_entropy(vqa_logits, vqa_targets)
 
     ret = {
         "vqa_loss": vqa_loss,
         "vqa_logits": vqa_logits,
         "vqa_targets": vqa_targets,
-        "vqa_labels": vqa_labels,
-        "vqa_scores": vqa_scores,
+        #"vqa_labels": vqa_labels,
+        #"vqa_scores": vqa_scores,
     }
 
     phase = "train" if pl_module.training else "val"

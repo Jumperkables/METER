@@ -18,7 +18,6 @@ def main(_config):
     pl.seed_everything(_config["seed"])
 
     dm = MTDataModule(_config, dist=True)
-
     model = METERTransformerSS(_config)
     exp_name = f'{_config["exp_name"]}'
 
@@ -33,7 +32,7 @@ def main(_config):
     #############
     # Jumperkables edited
     #breakpoint()
-    logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}', project="a_vs_c")
+    logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}', entity="jumperkables", project="a_vs_c")
     #logger = pl.loggers.TensorBoardLogger(
     #    _config["log_dir"],
     #    name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}',
@@ -76,6 +75,9 @@ def main(_config):
         fast_dev_run=_config["fast_dev_run"],
         val_check_interval=_config["val_check_interval"],
     )
+    ###### Added
+    trainer.normonly_flag = _config["normonly_flag"]
+    ######
 
     if not _config["test_only"]:
         trainer.fit(model, datamodule=dm)

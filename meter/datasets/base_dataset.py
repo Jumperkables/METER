@@ -89,6 +89,18 @@ class BaseDataset(torch.utils.data.Dataset):
             for i in range(len(self.table)):
                 self.index_mapper[i] = (i, None)
 
+    def regen_imapper_and_alltexts(self):
+        self.index_mapper = dict()
+        if self.text_column_name != "" and not self.image_only:
+            j = 0
+            for i, texts in enumerate(self.all_texts):
+                for _j in range(len(texts)):
+                    self.index_mapper[j] = (i, _j)
+                    j += 1
+        else:
+            for i in range(len(self.table)):
+                self.index_mapper[i] = (i, None)
+
     @property
     def corpus(self):
         return [text for texts in self.all_texts for text in texts]

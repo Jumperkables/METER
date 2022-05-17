@@ -15,6 +15,8 @@ class METERTransformerSS(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
         self.save_hyperparameters()
+        self.normonly_flag = config["normonly_flag"]
+        self.loss_type = config["loss_type"]
 
         self.is_clip= (not 'swin' in config['vit'])
 
