@@ -32,7 +32,11 @@ def main(_config):
     #############
     # Jumperkables edited
     #breakpoint()
-    logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}', entity="jumperkables", project="a_vs_c")
+    dset_version = _config["data_root"].split("/")[1].split("_")[0]
+    normonly = "normonly" if _config["normonly_flag"] else "full"
+    loss_type = _config["loss_type"]
+    jobname = f"{dset_version}_{normonly}_{loss_type}_METER"
+    logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=jobname, entity="jumperkables", project="a_vs_c")
     #logger = pl.loggers.TensorBoardLogger(
     #    _config["log_dir"],
     #    name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}',
