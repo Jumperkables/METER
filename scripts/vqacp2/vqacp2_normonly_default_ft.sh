@@ -8,7 +8,7 @@
 #SBATCH --job-name vqacp2_normonly_default_METER
 #SBATCH --mem 20G
 #SBATCH --gres gpu:1
-#SBATCH -o ../../result/vqacp2_normonly_default_METER.out
+#SBATCH -o ../../results/vqacp2_normonly_default_METER.out
 
 cd ../..
 source venv/bin/activate

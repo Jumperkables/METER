@@ -8,7 +8,7 @@
 #SBATCH --job-name vqa2_normonly_avsc-scaled_METER
 #SBATCH --mem 20G
 #SBATCH --gres gpu:1
-#SBATCH -o ../../result/vqa2_normonly_avsc-scaled_METER.out
+#SBATCH -o ../../results/vqa2_normonly_avsc-scaled_METER.out
 
 cd ../..
 source venv/bin/activate
