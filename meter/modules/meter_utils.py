@@ -10,6 +10,8 @@ from .dist_utils import all_gather
 from .objectives import compute_irtr_recall
 from ..gadgets.my_metrics import Accuracy, VQAScore, Scalar
 
+import torchmetrics
+
 
 def set_metrics(pl_module):
     for split in ["train", "val"]:
@@ -19,6 +21,11 @@ def set_metrics(pl_module):
             if k == "vqa":
                 setattr(pl_module, f"{split}_vqa_score", VQAScore())
                 setattr(pl_module, f"{split}_{k}_loss", Scalar())
+                setattr(pl_module, f"{split}_acc", torchmetrics.Accuracy())
+                setattr(pl_module, f"{split}_acc_top2", torchmetrics.Accuracy(top_k=2))
+                setattr(pl_module, f"{split}_acc_top3", torchmetrics.Accuracy(top_k=3))
+                setattr(pl_module, f"{split}_acc_top5", torchmetrics.Accuracy(top_k=5))
+                setattr(pl_module, f"{split}_acc_top10", torchmetrics.Accuracy(top_k=10))
             elif k == "nlvr2":
                 if split == "train":
                     setattr(pl_module, f"train_{k}_accuracy", Accuracy())

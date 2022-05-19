@@ -181,8 +181,18 @@ def compute_vqa(pl_module, batch):
     score = getattr(pl_module, f"{phase}_vqa_score")(
         ret["vqa_logits"], ret["vqa_targets"]
     )
+    acc = getattr(pl_module, f"{phase}_acc")(ret["vqa_logits"], ret["vqa_targets"])
+    acc_top2 = getattr(pl_module, f"{phase}_acc_top2")(ret["vqa_logits"], ret["vqa_targets"])
+    acc_top3 = getattr(pl_module, f"{phase}_acc_top3")(ret["vqa_logits"], ret["vqa_targets"])
+    acc_top5 = getattr(pl_module, f"{phase}_acc_top5")(ret["vqa_logits"], ret["vqa_targets"])
+    acc_top10 = getattr(pl_module, f"{phase}_acc_top10")(ret["vqa_logits"], ret["vqa_targets"])
     pl_module.log(f"vqa/{phase}/loss", loss)
     pl_module.log(f"vqa/{phase}/score", score)
+    pl_module.log(f"vqa/{phase}/acc", acc)
+    pl_module.log(f"vqa/{phase}/acc_top2", acc_top2)
+    pl_module.log(f"vqa/{phase}/acc_top3", acc_top3)
+    pl_module.log(f"vqa/{phase}/acc_top5", acc_top5)
+    pl_module.log(f"vqa/{phase}/acc_top10", acc_top10)
 
     return ret
 
