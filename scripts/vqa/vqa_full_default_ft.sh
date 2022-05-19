@@ -4,7 +4,7 @@
 #SBATCH -c 4
 #SBATCH -t 2-00:00
 #SBATCH -x gpu[0-8]
-#SBATCH --qos long-high-prio
+#SBATCH --qos short
 #SBATCH --job-name vqa_full_default_METER
 #SBATCH --mem 20G
 #SBATCH --gres gpu:1
