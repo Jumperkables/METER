@@ -11,6 +11,7 @@ class VQAv2DataModule(BaseDataModule):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.normonly_flag = args[0]["normonly_flag"]
+        self.norm_clipping = args[0]["norm_clipping"]
         self.loss_type = args[0]["loss_type"]
 
     @property
@@ -40,7 +41,9 @@ class VQAv2DataModule(BaseDataModule):
         avsc_path = os.path.abspath(f"{os.path.dirname(__file__)}/../../../a_vs_c")
         sys.path.append(avsc_path)
         from datasets import set_avsc_loss_tensor
-        idx2BCE_assoc_tensor, idx2BCE_ctgrcl_tensor, norm_dict = set_avsc_loss_tensor(None, self.answer2id)
+        # One line class definition to create dummy args
+        dummy_args = lambda: None; dummy_args.norm_ans_only = self.normonly_flag; dummy_args.norm_clipping = self.norm_clipping
+        idx2BCE_assoc_tensor, idx2BCE_ctgrcl_tensor, norm_dict = set_avsc_loss_tensor(dummy_args, self.answer2id)
 
         self.train_dataset.norm_dict = norm_dict
         self.val_dataset.norm_dict = norm_dict

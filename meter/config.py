@@ -45,7 +45,8 @@ def config():
     whole_word_masking = False # note that whole_word_masking does not work for RoBERTa
     mlm_prob = 0.15
     draw_false_text = 0
-    normonly_flag = False ###### TODO ######
+    normonly_flag = "simlex" ###### TODO ######
+    norm_clipping = 0. 
     loss_type = "default"#"avsc" "avsc-scaled"
 
 

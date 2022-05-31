@@ -31,9 +31,13 @@ def main(_config):
     )
     #############
     # Jumperkables edited
-    #breakpoint()
     dset_version = _config["data_root"].split("/")[1].split("_")[0]
-    normonly = "normonly" if _config["normonly_flag"] else "full"
+    if _config["normonly_flag"] == "simlex":
+        normonly = "simlex"
+    elif _config["normonly_flag"] == "expanded":
+        normonly = "_".join(_config["data_root"].split("/")[1].split("_")[1:-1])
+    else:
+        normonly = "full"
     loss_type = _config["loss_type"]
     jobname = f"{dset_version}_{normonly}_{loss_type}_METER"
     logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=jobname, entity="jumperkables", project="a_vs_c")
@@ -81,6 +85,7 @@ def main(_config):
     )
     ###### Added
     trainer.normonly_flag = _config["normonly_flag"]
+    trainer.norm_clipping = _config["norm_clipping"]
     ######
 
     if not _config["test_only"]:
