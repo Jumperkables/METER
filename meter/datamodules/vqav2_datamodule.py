@@ -10,7 +10,7 @@ import json
 class VQAv2DataModule(BaseDataModule):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.normonly_flag = args[0]["normonly_flag"]
+        self.normonly_flag = str(args[0]["normonly_flag"])
         self.norm_clipping = args[0]["norm_clipping"]
         self.loss_type = args[0]["loss_type"]
 
