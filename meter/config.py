@@ -162,7 +162,7 @@ def task_finetune_vqa_clip_bert():
     val_transform_keys = ["clip"]
     input_image_embed_size = 768
     image_size = 576
-    normonly_flag = False ###### TODO ######
+    normonly_flag = "None" ###### TODO ######
     loss_type = "default" # "avsc" "avsc-scaled"
 
 
