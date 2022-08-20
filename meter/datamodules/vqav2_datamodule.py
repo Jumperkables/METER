@@ -28,11 +28,17 @@ class VQAv2DataModule(BaseDataModule):
         val_answers = self.val_dataset.table["answers"].to_pandas().tolist()
         train_labels = self.train_dataset.table["answer_labels"].to_pandas().tolist()
         val_labels = self.val_dataset.table["answer_labels"].to_pandas().tolist()
+        breakpoint()
 
         all_answers = [c for c in train_answers + val_answers if c is not None]
         all_answers = [l for lll in all_answers for ll in lll for l in ll]
         all_labels = [c for c in train_labels + val_labels if c is not None]
         all_labels = [l for lll in all_labels for ll in lll for l in ll]
+
+        if self.data_dir == "data/vqacp2_full_arrow":
+            print("THIS APPENDING IS DONE BECAUSE THESE TWO ANSWERS ARE MISSED FOR SOME REASON")
+            all_answers.append('5 star')
+            all_answers.append("1 world")
 
         self.answer2id = {ans:idx for idx, ans in enumerate(list(set(all_answers)))}
         #self.answer2id = {k: v for k, v in zip(all_answers, all_labels)}
