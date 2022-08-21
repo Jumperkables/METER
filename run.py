@@ -3,6 +3,7 @@ import copy
 import pytorch_lightning as pl
 import os
 os.environ["NCCL_DEBUG"] = "INFO"
+import wandb
 
 from meter.config import ex
 from meter.modules import METERTransformerSS
@@ -40,6 +41,7 @@ def main(_config):
         normonly = "full"
     loss_type = _config["loss_type"]
     jobname = f"{dset_version}_{normonly}_{loss_type}_METER"
+    wandb.init(settings=wandb.Settings(start_method="fork"))
     logger = pl.loggers.WandbLogger(save_dir=_config["log_dir"], name=jobname, entity="jumperkables", project="a_vs_c")
     #logger = pl.loggers.TensorBoardLogger(
     #    _config["log_dir"],
