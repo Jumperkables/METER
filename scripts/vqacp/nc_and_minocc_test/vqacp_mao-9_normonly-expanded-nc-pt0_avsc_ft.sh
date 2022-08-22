@@ -2,9 +2,9 @@
 #SBATCH -N 1
 #SBATCH -p res-gpu-small
 #SBATCH -c 4
-#SBATCH -t 7-00:00
+#SBATCH -t 2-00:00
 #SBATCH -x gpu[0-8]
-#SBATCH --qos long-high-prio
+#SBATCH --qos short
 #SBATCH --job-name vqacp_mao-9_normonly-expanded-nc-pt0_avsc_METER
 #SBATCH --mem 20G
 #SBATCH --gres gpu:1
